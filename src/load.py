@@ -3,6 +3,9 @@ from dotenv import load_dotenv
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 import os
+import sqlite3
+import pandas as pd
+
 
 load_dotenv()
 
@@ -11,7 +14,8 @@ class Load():
 
     def __init__(self):
         self.mongo_uri = os.getenv('MONGO_URI')
-        self.client = MongoClient(self.mongo_uri, server_api=ServerApi('1'))
+        self.client = MongoClient(self.mongo_uri, server_api=ServerApi('1'),)
+
         
     def load_json(self, nome_doc, data):
         with open(f"{nome_doc}.json", "w", encoding="utf-8") as f:
@@ -25,3 +29,10 @@ class Load():
             collection.insert_many(data)
 
         print(f"Dados inseridos com sucesso na coleção '{collection_name}'!")
+
+    def load_sqlite(self, data: pd.DataFrame, nome_tabela: str):
+        df = pd.DataFrame(data)
+        conn = sqlite3.connect("IBGE.db")
+        df.to_sql(f"{nome_tabela}",con=conn, if_exists="replace", index=False)
+        conn.close()
+

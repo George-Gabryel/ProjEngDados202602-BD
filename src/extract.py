@@ -1,4 +1,6 @@
 import requests
+import os
+
 
 class Extract():
     def __init__(self):
