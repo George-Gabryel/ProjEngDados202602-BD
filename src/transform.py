@@ -10,8 +10,9 @@ class Transform:
         df.index.name= 'periodo'
         df = df.reset_index()
 
-        df['valor'] = df['valor'].replace('...', '0')
-        df['valor'] = df['valor'].astype(float)
+        # O IBGE usa "..." (dado não disponível), "-" e "X" como marcadores.
+        # Eles viram NaN (ausente), não 0, para não registrar uma taxa falsa de 0%.
+        df['valor'] = pd.to_numeric(df['valor'], errors='coerce')
         df['ano'] = df['periodo'].str[:4]
         df['tri'] = df['periodo'].str[-2:].astype(int)
         df['periodo'] = pd.PeriodIndex(df['ano']+'Q'+df['tri'].astype(str), freq='Q')

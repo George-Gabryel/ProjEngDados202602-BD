@@ -11,3 +11,4 @@ python-dotenv
 pymongo
 sqlalchemy 
 psycopg2-binary
+psycopg[binary]
