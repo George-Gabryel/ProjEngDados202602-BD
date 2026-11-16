@@ -1,14 +1,19 @@
 import os
 import pandas as pd
 from dotenv import load_dotenv
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, make_url
 
 load_dotenv()
 
 ACCESS_NEON = os.getenv("DATABASE_URL")
 os.environ["DISABLE_SQLALCHEMY_CEXT"] = "1"
 
-engine = create_engine(ACCESS_NEON)
+# SQLAlchemy 2.1 usa psycopg (v3) por padrão; o projeto instala psycopg2-binary
+url = make_url(ACCESS_NEON)
+if url.drivername in ("postgres", "postgresql"):
+    url = url.set(drivername="postgresql+psycopg2")
+
+engine = create_engine(url)
 
 df = pd.DataFrame(
     {
