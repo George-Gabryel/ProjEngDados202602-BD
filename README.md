@@ -117,7 +117,7 @@ Edite o `.env` gerado:
 ```
 MONGO_URI=<sua-connection-string-do-mongodb>
 
-NEON_DB=<connection-string-opcional-do-neon>
+DATABASE_URL=<connection-string-do-neon-postgres>
 ```
 
 ## Uso
